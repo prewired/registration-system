@@ -30,26 +30,39 @@ class Attendee(Base):
     emergency_contact_email = Column(String)
     photo_consent = Column(Boolean)
     form_filled_by = Column(String)
-    is_member = Column(Boolean)
     month_year_of_birth = Column(Date)
+    is_member = Column(Boolean)
+    registered_for_id = Column(ForeignKey("sessions.id"))
+
+    attendances = relationship("Attendance",
+        cascade="all, delete, delete-orphan", backref="attendee")
 
     def __repr__(self):
         return "<Attendee: {}>".format(self.name)
 
-class Mentor(Base):
-    __tablename__ = "mentors"
+class Visitor(Base):
+    __tablename__ = "visitors"
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
 
+    attendances = relationship("Attendance",
+        cascade="all, delete, delete-orphan", backref="visitor")
+
     def __repr__(self):
-        return "<Mentor: {}>".format(self.name)
+        return "<Visitor: {}>".format(self.name)
 
 class Session(Base):
-    __tablename__ = "session"
+    __tablename__ = "sessions"
 
     id = Column(Integer, primary_key=True)
     start = Column(DateTime)
+
+    registrations = relationship("Attendee",
+        cascade="all, delete, delete-orphan", backref="registered_for")
+
+    attendances = relationship("Attendance",
+            cascade="all, delete, delete-orphan", backref="session")
 
     def __repr__(self):
         return "<Session: {}>".format(self.start)
@@ -58,9 +71,9 @@ class Attendance(Base):
     __tablename__ = "attendances"
 
     id = Column(Integer, primary_key=True)
-    attendee_id = Column(ForeignKey(Attendee.id))
-    mentor_id = Column(ForeignKey(Mentor.id))
-    session_id = Column(ForeignKey(Session.id))
+    attendee_id = Column(ForeignKey("attendees.id"))
+    visitor_id = Column(ForeignKey("visitors.id"))
+    session_id = Column(ForeignKey("sessions.id"))
     time_in = Column(DateTime)
     time_out = Column(DateTime)
 

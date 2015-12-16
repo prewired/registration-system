@@ -1,0 +1,17 @@
+h1.brand {
+    font-size: 3em;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing: -2px;
+    text-shadow: 2px 2px 1px white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 26pt;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.margin-top-md {
+    margin-top: 25px;
+}
